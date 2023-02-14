@@ -5,12 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import hopital.exception.IdException;
+import hopital.exception.SecretaireException;
 import hopital.model.Secretaire;
 import hopital.repository.SecretaireRepository;
-import quest.exception.IdException;
-import quest.exception.SecretaireException;
-import quest.model.Adresse;
-import quest.repository.FiliereRepository;
 
 @Service
 public class SecretaireService {
@@ -29,10 +27,10 @@ public class SecretaireService {
 
 	private void checkConstraint(Secretaire secretaire) {
 		if (secretaire.getLogin() == null || secretaire.getPassword().isEmpty()) {
-			throw new SecretaireException("prenom obligatoire");
+			throw new SecretaireException("Login obligatoire");
 		}
 		if (secretaire.getLogin() == null || secretaire.getLogin().isEmpty()) {
-			throw new SecretaireException("nom obligatoire");
+			throw new SecretaireException("Login obligatoire");
 		}
 	}
 
@@ -64,7 +62,7 @@ public class SecretaireService {
 		checkConstraint(secretaire);
 		Secretaire secretaireEnBase = findById(secretaire.getId());
 		secretaireEnBase.setLogin(secretaire.getLogin());
-		secretaireEnBase.setLogin(secretaire.getPassword());
+		secretaireEnBase.setPassword(secretaire.getPassword());
 		
 		return secretaireRepo.save(secretaireEnBase);
 	}

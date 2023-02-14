@@ -5,42 +5,42 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import quest.exception.FormateurException;
-import quest.exception.IdException;
-import quest.model.Adresse;
-import quest.model.Formateur;
-import quest.repository.FiliereRepository;
-import quest.repository.FormateurRepository;
+import hopital.exception.IdException;
+import hopital.exception.VisiteException;
+import hopital.model.Visite;
+import hopital.repository.VisiteRepository;
 
 @Service
 public class VisiteService {
 
 	@Autowired
-	private FormateurRepository formateurRepo;
+	private VisiteRepository visiteRepo;
 	@Autowired
-	private FiliereRepository filiereRepo;
+	private PatientRepository patientRepo;
+	@Autowired
+	private MedecinRepository medecinRepo;
 
-	public Formateur create(Formateur formateur) {
-		checkNotNull(formateur);
-		if (formateur.getId() != null) {
+	public Visite create(Visite visite) {
+		checkNotNull(visite);
+		if (visite.getId() != null) {
 			throw new IdException();
 		}
-		checkConstraint(formateur);
-		return formateurRepo.save(formateur);
+		checkConstraint(visite);
+		return visiteRepo.save(visite);
 	}
 
-	private void checkConstraint(Formateur formateur) {
-		if (formateur.getPrenom() == null || formateur.getPrenom().isEmpty()) {
-			throw new FormateurException("prenom obligatoire");
+	private void checkConstraint(Visite visite) {
+		if (visite.getMedecin() ==null) {
+			throw new VisiteException("Medecin obligatoire");
 		}
-		if (formateur.getNom() == null || formateur.getNom().isEmpty()) {
-			throw new FormateurException("nom obligatoire");
+		if (visite.getPatient() == null ) {
+			throw new VisiteException("Patient obligatoire");
 		}
 	}
 
-	private void checkNotNull(Formateur formateur) {
-		if (formateur == null) {
-			throw new FormateurException("formateur obligatoire");
+	private void checkNotNull(Visite visite) {
+		if (visite == null) {
+			throw new VisiteException("visite obligatoire");
 		}
 	}
 
@@ -50,46 +50,37 @@ public class VisiteService {
 		}
 	}
 
-	private void checkExist(Formateur formateur) {
-		checkId(formateur.getId());
-		findById(formateur.getId());
+	private void checkExist(Visite visite) {
+		checkId(visite.getId());
+		findById(visite.getId());
 	}
 
-	public Formateur findById(Integer id) {
+	public Visite findById(Integer id) {
 		checkId(id);
-		return formateurRepo.findById(id).orElseThrow(FormateurException::new);
+		return visiteRepo.findById(id).orElseThrow(VisiteException::new);
 	}
 
-	public Formateur update(Formateur formateur) {
-		checkNotNull(formateur);
-		checkExist(formateur);
-		checkConstraint(formateur);
-		Formateur formateurEnBase = findById(formateur.getId());
-		formateurEnBase
-				.setCivilite(formateur.getCivilite() == null ? formateurEnBase.getCivilite() : formateur.getCivilite());
-		formateurEnBase.setPrenom(formateur.getPrenom());
-		formateurEnBase.setNom(formateur.getNom());
-		formateurEnBase.setEmail(formateur.getEmail());
-		formateurEnBase.setExperience(formateur.getExperience());
-		if (formateur.getAdresse() != null) {
-			formateurEnBase
-					.setAdresse(new Adresse(formateur.getAdresse().getRue(), formateur.getAdresse().getComplement(),
-							formateur.getAdresse().getCodePostal(), formateur.getAdresse().getVille()));
-		}
-		// si pas d'adresse dans le formateur recu on garde l'ancienne adresse
+	public Visite update(Visite visite) {
+		checkNotNull(visite);
+		checkExist(visite);
+		checkConstraint(visite);
+		Visite visiteEnBase = findById(visite.getId());
+		visiteEnBase.setDateVisite(visite.getDateVisite());
+		visiteEnBase.setMedecin(visite.getMedecin());
+		visiteEnBase.setPatient(visite.getPatient());
+		visiteEnBase.setSalle(visite.getSalle());
+		visiteEnBase.setPrix(visite.getPrix());
 
-		formateurEnBase.setExterne(formateur.isExterne());
-		return formateurRepo.save(formateurEnBase);
+		return visiteRepo.save(visiteEnBase);
 	}
 
-	public List<Formateur> findAll() {
-		return formateurRepo.findAll();
+	public List<Visite> findAll() {
+		return visiteRepo.findAll();
 	}
 
-	public void delete(Formateur formateur) {
-		checkExist(formateur);
-		filiereRepo.setReferentToNullByReferent(formateur);
-		formateurRepo.delete(formateur);
+	public void delete(Visite visite) {
+		checkExist(visite);
+		visiteRepo.delete(visite);
 	}
 
 	public void delete(Integer id) {

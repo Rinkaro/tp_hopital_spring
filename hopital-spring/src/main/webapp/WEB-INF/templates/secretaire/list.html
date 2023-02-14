@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<!-- ETAPE 5 : EXECUTION DE LA VIEW (AVEC LES DONNEES DU MODEL) -->
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="layout.html">
+<head>
+<meta charset="UTF-8">
+<title>Liste des secrétaires</title>
+</head>
+<body>
+<section layout:fragment="monContenu">
+	<div class="container">
+		<div class="card mt-3">
+			<div class="card-header bg-info text-white"><span class="h2">Liste des secrétaires</span></div>
+			<div class="card-body">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+						<th>Identifiant</th>
+						<th>Login</th>
+						<th>Mot de passe</th>
+						<th></th>
+					</tr>
+					</thead>
+					<tbody>						
+						<tr th:each="secretaire : ${secretaires}">
+							<td th:text="${secretaire.id}"></td>
+							<td>[[${secretaire.login}]]</td>
+							<td>[[${secretaire.password}]]</td>
+							<td>
+								<div class='btn-group btn-group-sm'>
+									<a th:href="@{/secretaire/edit(id=${secretaire.id})}" class='btn btn-primary'>
+										<i class='bi bi-pencil-square'></i>
+									</a>
+									<a th:href="@{/secretaire/delete(id=${secretaire.id})}" class='btn btn-danger'>
+										<i class='bi bi-trash'></i>
+									</a>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="card-footer">
+				<a th:href="@{/secretaire/add}" class="btn btn-success btn-lg">
+					<i class="bi bi-plus-square"></i>
+				</a>
+			</div>
+		</div>
+	</div>
+</section>
+
+</body>
+</html>
