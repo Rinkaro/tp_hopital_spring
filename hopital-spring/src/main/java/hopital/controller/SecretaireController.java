@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import hopital.controller.validator.SecretaireValidator;
 import hopital.model.Secretaire;
 import hopital.service.SecretaireService;
 
@@ -53,7 +54,8 @@ public class SecretaireController {
 
 	@PostMapping("")
 	public String save(@ModelAttribute("secretaire") @Valid Secretaire secretaire, BindingResult result, @RequestParam(required = false) Integer idReferent) {
-		//new SecretaireValidator().validate(secretaire, result);
+		
+		new SecretaireValidator().validate(secretaire, result);
 		
 		if(result.hasErrors()) {
 			return "secretaire/form";
