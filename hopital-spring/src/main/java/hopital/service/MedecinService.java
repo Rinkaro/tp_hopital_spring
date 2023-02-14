@@ -1,0 +1,84 @@
+package hopital.service;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import hopital.exception.IdException;
+import hopital.exception.MedecinException;
+import hopital.model.Medecin;
+import hopital.repository.MedecinRepository;
+
+public class MedecinService {
+
+	@Autowired
+	private MedecinRepository medecinRepo;
+	
+	public Medecin create(Medecin medecin) {
+		checkNotNull(medecin);
+		if (medecin.getId() != null) {
+			throw new IdException();
+		}
+		checkConstraint(medecin);
+		return medecinRepo.save(medecin);
+	}
+	
+	private void checkConstraint(Medecin medecin) {
+		if (medecin.getLogin() == null || medecin.getLogin().isEmpty()) {
+			throw new MedecinException("login obligatoire");
+		}
+		if (medecin.getPassword() == null || medecin.getPassword().isEmpty()) {
+			throw new MedecinException("password obligatoire");
+		}
+	}
+	
+	private void checkNotNull(Medecin medecin) {
+		if (medecin == null) {
+			throw new MedecinException("medecin obligatoire");
+		}
+	}
+
+	private void checkId(Integer id) {
+		if (id == null) {
+			throw new IdException();
+		}
+	}
+	
+	private void checkExist(Medecin medecin) {
+		checkId(medecin.getId());
+		findById(medecin.getId());
+	}
+
+	public Medecin findById(Integer id) {
+		checkId(id);
+		return medecinRepo.findById(id).orElseThrow(MedecinException::new);
+	}
+
+	public Medecin update(Medecin medecin) {
+		checkNotNull(medecin);
+		checkExist(medecin);
+		checkConstraint(medecin);
+		Medecin medecinEnBase = findById(medecin.getId());
+		
+		medecinEnBase.setLogin(medecin.getLogin());
+		medecinEnBase.setPassword(medecin.getPassword());
+		medecinEnBase.setSalle(medecin.getSalle());
+		
+		return medecinRepo.save(medecinEnBase);
+	}
+
+	public List<Medecin> findAll() {
+		return medecinRepo.findAll();
+	}
+
+	public void delete(Medecin medecin) {
+		checkExist(medecin);
+//		filiereRepo.setReferentToNullByReferent(formateur);
+		medecinRepo.delete(medecin);
+	}
+
+	public void delete(Integer id) {
+		delete(findById(id));
+	}
+	
+}
