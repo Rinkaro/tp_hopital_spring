@@ -3,12 +3,14 @@ package hopital.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import hopital.exception.IdException;
 import hopital.exception.MedecinException;
 import hopital.model.Medecin;
 import hopital.repository.MedecinRepository;
 
+@Service
 public class MedecinService {
 
 	@Autowired
