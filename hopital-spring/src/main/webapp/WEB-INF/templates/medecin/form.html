@@ -35,14 +35,7 @@
 								th:value="${medecin.password}"> 
 							<span class="text-danger" th:errors="${medecin.password}"></span>
 						</div>
-						<!-- <div class="form-group">
-							<label for="idReferent">Référent:</label>
-							<select name="idReferent" class="form-control">
-								<option value="">Veuillez sélectionner un formateur référent</option>
-								<option th:each="form : ${formateurs}"  th:value="${form.id}" th:selected="${form.id == filiere.referent?.id}">[[${form.nom}]] [[${form.prenom}]]</option>
-							</select>
-							<span class="text-danger" th:errors="${filiere.referent.id}"></span>
-						</div> -->
+						
 					</div>
 			</div>
 			<div class="card-footer d-flex justify-content-end">

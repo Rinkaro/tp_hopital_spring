@@ -47,7 +47,7 @@ public class MedecinController {
 		model.addAttribute("medecin", medecinSrv.findById(id));
 //		model.addAttribute("formateurs", formateurService.findAll());
 
-		return "filiere/form";
+		return "medecin/form";
 	}
 
 	@PostMapping("")
