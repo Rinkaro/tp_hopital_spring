@@ -15,10 +15,10 @@ public class VisiteService {
 
 	@Autowired
 	private VisiteRepository visiteRepo;
-	@Autowired
-	private PatientRepository patientRepo;
-	@Autowired
-	private MedecinRepository medecinRepo;
+//	@Autowired
+//	private PatientRepository patientRepo;
+//	@Autowired
+//	private MedecinRepository medecinRepo;
 
 	public Visite create(Visite visite) {
 		checkNotNull(visite);
